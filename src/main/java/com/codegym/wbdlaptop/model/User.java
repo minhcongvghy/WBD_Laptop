@@ -60,6 +60,37 @@ public class User {
     @OneToMany(targetEntity = Comment.class, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @Lob
+    private String blobString;
+
+    @Lob
+    private String avatar;
+
+    public User(Long id, Set<Role> roles, List<Product> products, List<Comment> comments, String blobString, String avatar) {
+        this.id = id;
+        this.roles = roles;
+        this.products = products;
+        this.comments = comments;
+        this.blobString = blobString;
+        this.avatar = avatar;
+    }
+
+    public String getBlobString() {
+        return blobString;
+    }
+
+    public void setBlobString(String blobString) {
+        this.blobString = blobString;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public User() {
     }
 

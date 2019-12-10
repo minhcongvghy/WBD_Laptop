@@ -1,6 +1,7 @@
 package com.codegym.wbdlaptop.service;
 
 import com.codegym.wbdlaptop.model.Product;
+import com.codegym.wbdlaptop.model.User;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.Blob;
@@ -57,6 +58,11 @@ public abstract  class FirebaseStorageService<T> {
             return product.getId().toString().concat(" - ").concat(product.getName()).concat(".").concat(extension);
         }
 
+        if (object instanceof User) {
+            User user = (User) object;
+            return user.getId().toString().concat("-").concat(user.getUsername()).concat(".").concat(extension);
+        }
+
         return null;
     }
 
@@ -72,12 +78,20 @@ public abstract  class FirebaseStorageService<T> {
                 blobString = "product/" + fileName;
             }
 
+            if (object instanceof User) {
+                blobString = "user/" + fileName;
+            }
+
             Blob blob = bucket.create(blobString, testFile, Bucket.BlobWriteOption.userProject("cong500"));
             bucket.getStorage().updateAcl(blob.getBlobId(), Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
             String blobName = blob.getName();
 
             if (object instanceof Product) {
                 ((Product) object).setBlobString(blobName);
+            }
+
+            if (object instanceof User) {
+                ((User) object).setBlobString(blobName);
             }
             return blob.getMediaLink();
         } catch (IOException ex) {
@@ -91,6 +105,10 @@ public abstract  class FirebaseStorageService<T> {
             String blobString = "";
             if (object instanceof Product) {
                 blobString = ((Product) object).getBlobString();
+            }
+
+            if (object instanceof User) {
+                blobString = ((User) object).getBlobString();
             }
 
             BlobId blobId = BlobId.of(storageClient.bucket().getName(), blobString);

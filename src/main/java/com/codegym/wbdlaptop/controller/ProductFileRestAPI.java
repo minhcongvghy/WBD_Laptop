@@ -3,8 +3,11 @@ package com.codegym.wbdlaptop.controller;
 import com.codegym.wbdlaptop.message.request.FileForm;
 import com.codegym.wbdlaptop.message.response.ResponseMessage;
 import com.codegym.wbdlaptop.model.Product;
+import com.codegym.wbdlaptop.model.User;
 import com.codegym.wbdlaptop.service.IProductService;
+import com.codegym.wbdlaptop.service.IUserService;
 import com.codegym.wbdlaptop.service.Impl.ProductFirebaseServiceImpl;
+import com.codegym.wbdlaptop.service.Impl.UserFirebaseServiceExtends;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,12 @@ public class ProductFileRestAPI {
 
     @Autowired
     private ProductFirebaseServiceImpl firebaseService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private UserFirebaseServiceExtends userFirebaseServiceExtends;
 
     @Autowired
     Environment env;
@@ -56,6 +65,36 @@ public class ProductFileRestAPI {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e ,  HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(value = "/user-avatar/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    public ResponseEntity<?> uploadAvatarUser(@ModelAttribute FileForm fileForm, BindingResult result, @PathVariable Long id) throws IOException {
+        try {
+            if (result.hasErrors()) {
+                return new ResponseEntity<>(new ResponseMessage("Upload avatar user fail"), HttpStatus.BAD_REQUEST);
+            }
+            MultipartFile multipartFile = fileForm.getFile();
+            Optional<User> user = userService.findById(id);
+
+            if (!user.isPresent()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            if (multipartFile != null) {
+                if(user.get().getBlobString() == null) {
+                    String urlFile = userFirebaseServiceExtends.saveToFirebaseStorage(user.get() , multipartFile);
+                    user.get().setAvatar(urlFile);
+                } else {
+                    userFirebaseServiceExtends.deleteFirebaseStorageFile(user.get());
+                    String urlFile = userFirebaseServiceExtends.saveToFirebaseStorage(user.get() , multipartFile);
+                    user.get().setAvatar(urlFile);
+                }
+            }
+            userService.save(user.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

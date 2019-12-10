@@ -11,15 +11,25 @@ public class JwtResponse {
     private String username;
     private String name;
     private String email;
+    private String avatar;
     private Collection<? extends GrantedAuthority> roles;
 
-    public JwtResponse(String accessToken, String username,Long id, String name, String email, Collection<? extends GrantedAuthority> roles) {
+    public JwtResponse(String accessToken, String username,Long id, String name, String email, String avatar , Collection<? extends GrantedAuthority> roles) {
         this.token = accessToken;
         this.username = username;
         this.roles = roles;
         this.id = id;
         this.name = name;
         this.email = email;
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getEmail() {
