@@ -9,4 +9,5 @@ public interface IProductRepository extends PagingAndSortingRepository<Product, 
     Iterable<Product> findProductsByUserId(Long user_id);
     Iterable<Product> findProductsByNameContaining(String name);
     Iterable<Product> findProductsByLineId(Long line_id);
+    Iterable<Product> findProductsByLineIdAndNameContaining(Long line_id, String name);
 }

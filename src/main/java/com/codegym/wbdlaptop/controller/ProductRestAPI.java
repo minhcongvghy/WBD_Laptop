@@ -1,5 +1,6 @@
 package com.codegym.wbdlaptop.controller;
 
+import com.codegym.wbdlaptop.message.request.SearchProductByLineAndName;
 import com.codegym.wbdlaptop.message.request.SearchProductByNameForm;
 import com.codegym.wbdlaptop.model.Product;
 import com.codegym.wbdlaptop.service.IProductService;
@@ -119,6 +120,54 @@ public class ProductRestAPI {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(products,HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/product/search-by-lineId/{id}")
+    public ResponseEntity<?> searchByLineId(@PathVariable Long id) {
+        List<Product> products = (List<Product>) productService.findProductsByLineId(id);
+
+        if (products.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+    @PostMapping("/product/search-by-line-and-name")
+    public ResponseEntity<?> searchProductByLineAndName(@RequestBody SearchProductByLineAndName searchForm) {
+        if (searchForm.getName() == null && searchForm.getLineId() == null) {
+            List<Product> products = (List<Product>) productService.findAll();
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        }
+
+        if (searchForm.getName() == null && searchForm.getLineId() != null) {
+            List<Product> products = (List<Product>) productService.findProductsByLineId(searchForm.getLineId());
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        }
+
+        if (searchForm.getName() != null && searchForm.getLineId() == null) {
+            List<Product> products = (List<Product>) productService.findProductsByNameContaining(searchForm.getName());
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        }
+
+        if (searchForm.getLineId() != null && searchForm.getName() != null) {
+            List<Product> products = (List<Product>) productService.findProductsByLineIdAndNameContaining(searchForm.getLineId(),searchForm.getName());
+            if(products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

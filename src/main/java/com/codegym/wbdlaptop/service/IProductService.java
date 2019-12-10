@@ -22,4 +22,6 @@ public interface IProductService {
     Iterable<Product> findProductsByLineId(Long line_id);
 
     Iterable<Product> findProductsByNameContaining(String name);
+
+    Iterable<Product> findProductsByLineIdAndNameContaining(Long line_id, String name);
 }

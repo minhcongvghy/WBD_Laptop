@@ -54,4 +54,9 @@ public class ProductServiceImpl implements IProductService {
     public Iterable<Product> findProductsByNameContaining(String name) {
         return repository.findProductsByNameContaining(name);
     }
+
+    @Override
+    public Iterable<Product> findProductsByLineIdAndNameContaining(Long line_id, String name) {
+        return repository.findProductsByLineIdAndNameContaining(line_id, name);
+    }
 }
