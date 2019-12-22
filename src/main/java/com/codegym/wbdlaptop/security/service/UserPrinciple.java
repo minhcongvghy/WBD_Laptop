@@ -59,8 +59,6 @@ public class UserPrinciple implements UserDetails {
         );
     }
 
-
-
     public String getName() {
         return name;
     }

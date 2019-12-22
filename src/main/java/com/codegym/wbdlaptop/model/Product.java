@@ -18,7 +18,7 @@ public class Product {
     @Lob
     private String cpu;
 
-    private int ram;
+    private String ram;
 
     private Double price;
 
@@ -46,7 +46,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String cpu, int ram, Double price, String description, String urlFile, String blobString, Boolean isUpdate, Line line, User user, List<Comment> comments) {
+    public Product(String name, String cpu, String ram, Double price, String description, String urlFile, String blobString, Boolean isUpdate, Line line, User user, List<Comment> comments) {
         this.name = name;
         this.cpu = cpu;
         this.ram = ram;
@@ -60,7 +60,7 @@ public class Product {
         this.comments = comments;
     }
 
-    public Product(String name, String cpu, int ram, Double price, String description, String urlFile, String blobString, Boolean isUpdate, Line line, User user) {
+    public Product(String name, String cpu, String ram, Double price, String description, String urlFile, String blobString, Boolean isUpdate, Line line, User user) {
         this.name = name;
         this.cpu = cpu;
         this.ram = ram;
@@ -73,7 +73,7 @@ public class Product {
         this.user = user;
     }
 
-    public Product(String name, String cpu, int ram, Double price, String description, String urlFile) {
+    public Product(String name, String cpu, String ram, Double price, String description, String urlFile) {
         this.name = name;
         this.cpu = cpu;
         this.ram = ram;
@@ -82,7 +82,7 @@ public class Product {
         this.urlFile = urlFile;
     }
 
-    public Product(String name, String cpu, int ram, Double price, String description) {
+    public Product(String name, String cpu, String ram, Double price, String description) {
         this.name = name;
         this.cpu = cpu;
         this.ram = ram;
@@ -114,11 +114,11 @@ public class Product {
         this.cpu = cpu;
     }
 
-    public int getRam() {
+    public String getRam() {
         return ram;
     }
 
-    public void setRam(int ram) {
+    public void setRam(String ram) {
         this.ram = ram;
     }
 
